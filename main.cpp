@@ -396,13 +396,13 @@ public:
 
 
 int main() {
-    std::cout << "Контейнер SeqContainer (последовательный)\n";
+    std::cout << "SeqContainer (sequential)\n";
 
     SeqContainer<int> vec;
 
     for (int i = 0; i < 10; ++i) vec.push_back(i);
 
-    std::cout << "Начальное содержимое: ";
+    std::cout << "Initial content: ";
     bool first = true;
     for (auto val : vec) {
         if (!first) std::cout << ", ";
@@ -411,7 +411,7 @@ int main() {
     }
     std::cout << "\n";
 
-    std::cout << "Размер контейнера : " << vec.size() << "\n";
+    std::cout << "Container size: " << vec.size() << "\n";
 
     // 5. Удаление третьего (по счёту), пятого и седьмого элементов.
     auto it_v = vec.begin();
@@ -422,7 +422,7 @@ int main() {
     std::advance(it_v, 1); // 7-й элемент (изначально, теперь индекс 4, значение 6)
     vec.erase(it_v);
 
-    std::cout << "После удаления: ";
+    std::cout << "After removal: ";
     first = true;
     for (auto val : vec) {
         if (!first) std::cout << ", ";
@@ -434,7 +434,7 @@ int main() {
     // 7. Добавление элемента 10 в начало контейнера.
     vec.insert(vec.begin(), 10);
 
-    std::cout << "После добавления 10 в начало: ";
+    std::cout << "After adding 10 to the beginning: ";
     first = true;
     for (auto val : vec) {
         if (!first) std::cout << ", ";
@@ -448,7 +448,7 @@ int main() {
     std::advance(mid_it_v, 4);
     vec.insert(mid_it_v, 20);
 
-    std::cout << "После добавления 20 в середину: ";
+    std::cout << "After adding 20 to the middle: ";
     first = true;
     for (auto val : vec) {
         if (!first) std::cout << ", ";
@@ -460,7 +460,7 @@ int main() {
     // 11. Добавление элемента 30 в конец контейнера.
     vec.push_back(30);
 
-    std::cout << "Финальное содержимое: ";
+    std::cout << "Final content: ";
     first = true;
     for (auto val : vec) {
         if (!first) std::cout << ", ";
@@ -470,13 +470,13 @@ int main() {
     std::cout << "\n\n";
 
     // ===============================================================
-    std::cout << "Контейнер DLLContainer (двунаправленный)\n";
+    std::cout << "DLLContainer (doubly linked list)\n";
 
     DLLContainer<int> list;
 
     for (int i = 0; i < 10; ++i) list.push_back(i);
 
-    std::cout << "Начальное содержимое: ";
+    std::cout << "Initial content: ";
     first = true;
     for (auto val : list) {
         if (!first) std::cout << ", ";
@@ -485,7 +485,7 @@ int main() {
     }
     std::cout << "\n";
 
-    std::cout << "Размер контейнера: " << list.size() << "\n";
+    std::cout << "Container size: " << list.size() << "\n";
 
     // 5. Удаление третьего (по счёту), пятого и седьмого элементов.
     auto it_l = list.begin();
@@ -496,7 +496,7 @@ int main() {
     std::advance(it_l, 1); // 7-й элемент (изначально)
     list.erase(it_l);
 
-    std::cout << "После удаления: ";
+    std::cout << "After removal: ";
     first = true;
     for (auto val : list) {
         if (!first) std::cout << ", ";
@@ -508,7 +508,7 @@ int main() {
     // 7. Добавление элемента 10 в начало контейнера.
     list.insert(list.begin(), 10);
 
-    std::cout << "После добавления 10 в начало: ";
+    std::cout << "After adding 10 to the beginning: ";
     first = true;
     for (auto val : list) {
         if (!first) std::cout << ", ";
@@ -522,7 +522,7 @@ int main() {
     std::advance(mid_it_l, 4);
     list.insert(mid_it_l, 20);
 
-    std::cout << "После добавления 20 в середину: ";
+    std::cout << "After adding 20 to the middle: ";
     first = true;
     for (auto val : list) {
         if (!first) std::cout << ", ";
@@ -534,7 +534,7 @@ int main() {
     // 11. Добавление элемента 30 в конец контейнера.
     list.push_back(30);
 
-    std::cout << "Финальное содержимое: ";
+    std::cout << "Final content: ";
     first = true;
     for (auto val : list) {
         if (!first) std::cout << ", ";
@@ -543,13 +543,13 @@ int main() {
     }
     std::cout << "\n\n";
 
-    std::cout << "Контейнер SLLContainer (однонаправленный)\n";
+    std::cout << "SLLContainer (singly linked list)\n";
 
     SLLContainer<int> fwd_list;
 
     for (int i = 0; i < 10; ++i) fwd_list.push_back(i);
 
-    std::cout << "Начальное содержимое: ";
+    std::cout << "Initial content: ";
     first = true;
     for (auto val : fwd_list) {
         if (!first) std::cout << ", ";
@@ -558,7 +558,7 @@ int main() {
     }
     std::cout << "\n";
 
-    std::cout << "Размер контейнера: " << fwd_list.size() << "\n";
+    std::cout << "Container size: " << fwd_list.size() << "\n";
 
     // 5. Удаление третьего (по счёту), пятого и седьмого элементов.
     auto it_f = fwd_list.begin();
@@ -569,7 +569,7 @@ int main() {
     std::advance(it_f, 1);
     fwd_list.erase(it_f);
 
-    std::cout << "После удаления: ";
+    std::cout << "After removal: ";
     first = true;
     for (auto val : fwd_list) {
         if (!first) std::cout << ", ";
@@ -581,7 +581,7 @@ int main() {
     // 7. Добавление элемента 10 в начало контейнера.
     fwd_list.insert(fwd_list.begin(), 10);
 
-    std::cout << "После добавления 10 в начало: ";
+    std::cout << "After adding 10 to the beginning: ";
     first = true;
     for (auto val : fwd_list) {
         if (!first) std::cout << ", ";
@@ -595,7 +595,7 @@ int main() {
     std::advance(mid_it_f, 4);
     fwd_list.insert(mid_it_f, 20);
 
-    std::cout << "После добавления 20 в середину: ";
+    std::cout << "After adding 20 to the middle: ";
     first = true;
     for (auto val : fwd_list) {
         if (!first) std::cout << ", ";
@@ -607,7 +607,7 @@ int main() {
     // 11. Добавление элемента 30 в конец контейнера.
     fwd_list.push_back(30);
 
-    std::cout << "Финальное содержимое: ";
+    std::cout << "Final content: ";
     first = true;
     for (auto val : fwd_list) {
         if (!first) std::cout << ", ";
