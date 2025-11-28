@@ -1,0 +1,111 @@
+name: C++ CI/CD
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  bump-version:
+    runs-on: ubuntu-latest
+    permissions: write-all
+    outputs:
+      new_tag: ${{ steps.bump_version.outputs.new_tag }}
+      commit_count: ${{ steps.bump_version.outputs.commit_count }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - name: Get commit count
+        id: bump_version
+        run: |
+          commit_count=$(git rev-list --count HEAD)
+          new_tag="v1.0.$commit_count"
+          echo "new_tag=$new_tag" >> $GITHUB_OUTPUT
+          echo "commit_count=$commit_count" >> $GITHUB_OUTPUT
+
+  build-linux:
+    runs-on: ubuntu-latest
+    needs: bump-version
+    
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y build-essential cmake
+      
+      - name: Configure CMake
+        run: cmake . -DPROJECT_VERSION_PATCH=${{ needs.bump-version.outputs.commit_count }}
+      
+      - name: Build project
+        run: cmake --build .
+      
+      - name: Create package
+        run: cmake --build . --target package
+      
+      - name: Upload Linux artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-package
+          path: "*.deb"
+
+  build-windows:
+    runs-on: windows-latest
+    needs: bump-version
+    
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure CMake
+        run: |
+          mkdir build
+          cd build
+          cmake .. -DPROJECT_VERSION_PATCH=${{ needs.bump-version.outputs.commit_count }} -Dgtest_force_shared_crt=ON
+
+      - name: Build
+        run: |
+          cd build
+          cmake --build . --config Release
+      
+      - name: Create package
+        run: |
+          cd build
+          mkdir package
+          copy Release\lab3.exe package\
+          7z a -tzip lab3-${{ needs.bump-version.outputs.new_tag }}-windows.zip package\*
+      
+      - name: Upload Windows artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-package
+          path: build/*.zip
+
+  create-release:
+    if: github.ref == 'refs/heads/main'
+    needs: [bump-version, build-linux, build-windows]
+    runs-on: ubuntu-latest
+    permissions: write-all
+    
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ needs.bump-version.outputs.new_tag }}
+          name: Release ${{ needs.bump-version.outputs.new_tag }}
+          generate_release_notes: true
+          files: |
+            artifacts/linux-package/*
+            artifacts/windows-package/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
