@@ -4,7 +4,6 @@
 #include <stdexcept>
 #include <iterator>
 #include <utility>
-#include <windows.h>
 
 
 template <typename T>
@@ -397,14 +396,6 @@ public:
 
 
 int main() {
-#ifdef _WIN32
-    SetConsoleOutputCP(CP_UTF8);
-    SetConsoleCP(CP_UTF8);
-#else
-    std::setlocale(LC_ALL, "en_US.UTF-8");
-#endif
-    
-
     std::cout << "Контейнер SeqContainer (последовательный)\n";
 
     SeqContainer<int> vec;
