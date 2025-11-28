@@ -4,6 +4,8 @@
 #include <stdexcept>
 #include <iterator>
 #include <utility>
+#include <windows.h>
+
 
 template <typename T>
 class ParContainer {
@@ -395,6 +397,9 @@ public:
 
 
 int main() {
+    SetConsoleOutputCP(CP_UTF8);
+    SetConsoleCP(CP_UTF8);
+
     std::cout << "Контейнер SeqContainer (последовательный)\n";
 
     SeqContainer<int> vec;
