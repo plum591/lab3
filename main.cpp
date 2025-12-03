@@ -17,7 +17,6 @@ public:
     virtual bool empty() const = 0;
 };
 
-
 template <typename T>
 class SeqContainer : public ParContainer<T> {
 private:
@@ -36,7 +35,7 @@ private:
     }
 
 public:
-    //  Итератор (Random Access)
+    // итератор (Random Access для последовательного)
     class Iterator {
     public:
         using iterator_category = std::random_access_iterator_tag;
@@ -47,21 +46,18 @@ public:
 
         Iterator(T* ptr) : m_ptr(ptr) {}
         reference operator*() const { return *m_ptr; }
-
-        // Инкремент/Декремент
+        // ++ -- 
         Iterator& operator++() { m_ptr++; return *this; }
         Iterator operator++(int) { Iterator tmp = *this; ++(*this); return tmp; }
         Iterator& operator--() { m_ptr--; return *this; }
         Iterator operator--(int) { Iterator tmp = *this; --(*this); return tmp; }
-
-        // Арифметика (требуется для Random Access и std::advance)
+        // += -= + - 
         Iterator& operator+=(difference_type n) { m_ptr += n; return *this; }
         Iterator& operator-=(difference_type n) { m_ptr -= n; return *this; }
         Iterator operator+(difference_type n) const { return Iterator(m_ptr + n); }
         Iterator operator-(difference_type n) const { return Iterator(m_ptr - n); }
         difference_type operator-(const Iterator& other) const { return m_ptr - other.m_ptr; }
-
-        // Сравнения
+        // сравнения
         bool operator==(const Iterator& other) const { return m_ptr == other.m_ptr; }
         bool operator!=(const Iterator& other) const { return m_ptr != other.m_ptr; }
         bool operator<(const Iterator& other) const { return m_ptr < other.m_ptr; }
@@ -394,14 +390,12 @@ public:
     iterator end() { return iterator(nullptr); }
 };
 
-
 int main() {
     std::cout << "SeqContainer (sequential)\n";
 
     SeqContainer<int> vec;
-
+    // 0-9
     for (int i = 0; i < 10; ++i) vec.push_back(i);
-
     std::cout << "Initial content: ";
     bool first = true;
     for (auto val : vec) {
@@ -413,13 +407,13 @@ int main() {
 
     std::cout << "Container size: " << vec.size() << "\n";
 
-    // 5. Удаление третьего (по счёту), пятого и седьмого элементов.
+    // Удаление третьего,пятого и седьмого элемента
     auto it_v = vec.begin();
-    std::advance(it_v, 2); // 3-й элемент (индекс 2, значение 2)
+    std::advance(it_v, 2); // 3 элемент 
     it_v = vec.erase(it_v);
-    std::advance(it_v, 1); // 5-й элемент (изначально, теперь индекс 3, значение 4)
+    std::advance(it_v, 1); // 5 элемент 
     it_v = vec.erase(it_v);
-    std::advance(it_v, 1); // 7-й элемент (изначально, теперь индекс 4, значение 6)
+    std::advance(it_v, 1); // 7 элемент
     vec.erase(it_v);
 
     std::cout << "After removal: ";
@@ -431,7 +425,7 @@ int main() {
     }
     std::cout << "\n";
 
-    // 7. Добавление элемента 10 в начало контейнера.
+    // Добавление элемента 10 в начало 
     vec.insert(vec.begin(), 10);
 
     std::cout << "After adding 10 to the beginning: ";
@@ -443,7 +437,7 @@ int main() {
     }
     std::cout << "\n";
 
-    // 9. Добавление элемента 20 в середину контейнера (позиция 4: между 3 и 5)
+    // Добавление элемента 20 в середину 
     auto mid_it_v = vec.begin();
     std::advance(mid_it_v, 4);
     vec.insert(mid_it_v, 20);
@@ -457,7 +451,7 @@ int main() {
     }
     std::cout << "\n";
 
-    // 11. Добавление элемента 30 в конец контейнера.
+    // Добавление элемента 30 в конец
     vec.push_back(30);
 
     std::cout << "Final content: ";
@@ -469,13 +463,11 @@ int main() {
     }
     std::cout << "\n\n";
 
-    // ===============================================================
+
+
     std::cout << "DLLContainer (doubly linked list)\n";
-
     DLLContainer<int> list;
-
     for (int i = 0; i < 10; ++i) list.push_back(i);
-
     std::cout << "Initial content: ";
     first = true;
     for (auto val : list) {
@@ -484,7 +476,6 @@ int main() {
         first = false;
     }
     std::cout << "\n";
-
     std::cout << "Container size: " << list.size() << "\n";
 
     // 5. Удаление третьего (по счёту), пятого и седьмого элементов.
@@ -542,6 +533,8 @@ int main() {
         first = false;
     }
     std::cout << "\n\n";
+
+
 
     std::cout << "SLLContainer (singly linked list)\n";
 
