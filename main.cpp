@@ -10,7 +10,6 @@ template <typename T>
 class ParContainer {
 public:
     virtual ~ParContainer() = default;
-
     virtual void push_back(const T& value) = 0;
     virtual void push_back(T&& value) = 0;
     virtual size_t size() const = 0;
@@ -24,7 +23,6 @@ private:
     size_t m_capacity = 0;
     std::unique_ptr<T[]> m_data;
 
-    // Резервирование памяти (коэффициент 2.0)
     void reallocate(size_t new_capacity) {
         auto new_data = std::make_unique<T[]>(new_capacity);
         for (size_t i = 0; i < m_size; ++i) {
@@ -128,7 +126,7 @@ public:
         m_size--; return iterator(&m_data[index]);
     }
 
-    // operator[] (доступ по индексу)
+    // operator[] 
     T& operator[](size_t index) {
         if (index >= m_size) throw std::out_of_range("Index out of range");
         return m_data[index];
@@ -140,7 +138,6 @@ public:
     iterator begin() { return iterator(m_data.get()); }
     iterator end() { return iterator(m_data.get() + m_size); }
 };
-
 
 template <typename T>
 class DLLContainer : public ParContainer<T> {
@@ -158,7 +155,7 @@ private:
     size_t m_size = 0;
 
 public:
-    // Итератор (Bidirectional)
+    // Итератор (Bidirectional двусвязный)
     class Iterator {
     public:
         using iterator_category = std::bidirectional_iterator_tag;
@@ -275,7 +272,6 @@ public:
     iterator begin() { return iterator(head.get()); }
     iterator end() { return iterator(nullptr); }
 };
-
 
 template <typename T>
 class SLLContainer : public ParContainer<T> {
@@ -478,13 +474,12 @@ int main() {
     std::cout << "\n";
     std::cout << "Container size: " << list.size() << "\n";
 
-    // 5. Удаление третьего (по счёту), пятого и седьмого элементов.
     auto it_l = list.begin();
-    std::advance(it_l, 2); // 3-й элемент
+    std::advance(it_l, 2); 
     it_l = list.erase(it_l);
-    std::advance(it_l, 1); // 5-й элемент (изначально)
+    std::advance(it_l, 1); 
     it_l = list.erase(it_l);
-    std::advance(it_l, 1); // 7-й элемент (изначально)
+    std::advance(it_l, 1); 
     list.erase(it_l);
 
     std::cout << "After removal: ";
@@ -496,9 +491,7 @@ int main() {
     }
     std::cout << "\n";
 
-    // 7. Добавление элемента 10 в начало контейнера.
     list.insert(list.begin(), 10);
-
     std::cout << "After adding 10 to the beginning: ";
     first = true;
     for (auto val : list) {
@@ -508,7 +501,6 @@ int main() {
     }
     std::cout << "\n";
 
-    // 9. Добавление элемента 20 в середину контейнера (позиция 4)
     auto mid_it_l = list.begin();
     std::advance(mid_it_l, 4);
     list.insert(mid_it_l, 20);
@@ -522,7 +514,6 @@ int main() {
     }
     std::cout << "\n";
 
-    // 11. Добавление элемента 30 в конец контейнера.
     list.push_back(30);
 
     std::cout << "Final content: ";
@@ -553,7 +544,6 @@ int main() {
 
     std::cout << "Container size: " << fwd_list.size() << "\n";
 
-    // 5. Удаление третьего (по счёту), пятого и седьмого элементов.
     auto it_f = fwd_list.begin();
     std::advance(it_f, 2);
     it_f = fwd_list.erase(it_f);
@@ -571,7 +561,6 @@ int main() {
     }
     std::cout << "\n";
 
-    // 7. Добавление элемента 10 в начало контейнера.
     fwd_list.insert(fwd_list.begin(), 10);
 
     std::cout << "After adding 10 to the beginning: ";
@@ -583,7 +572,6 @@ int main() {
     }
     std::cout << "\n";
 
-    // 9. Добавление элемента 20 в середину контейнера (позиция 4)
     auto mid_it_f = fwd_list.begin();
     std::advance(mid_it_f, 4);
     fwd_list.insert(mid_it_f, 20);
@@ -596,8 +584,6 @@ int main() {
         first = false;
     }
     std::cout << "\n";
-
-    // 11. Добавление элемента 30 в конец контейнера.
     fwd_list.push_back(30);
 
     std::cout << "Final content: ";
@@ -608,6 +594,5 @@ int main() {
         first = false;
     }
     std::cout << "\n\n";
-
     return 0;
 }
