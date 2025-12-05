@@ -22,7 +22,21 @@ if(WIN32)
     endif()
 endif()
 
-add_executable(lab3 main.cpp)
+# Добавляем все исходные файлы
+set(SOURCES
+    main.cpp
+    DLLContainer.cpp
+    SeqContainer.cpp
+    SLLContainer.cpp
+)
+
+set(HEADERS
+    DLLContainer.h
+    SeqContainer.h
+    SLLContainer.h
+)
+
+add_executable(lab3 ${SOURCES} ${HEADERS})
 
 set_target_properties(lab3 PROPERTIES
     CXX_STANDARD 17
@@ -30,10 +44,13 @@ set_target_properties(lab3 PROPERTIES
 )
 
 if (MSVC)
-    target_compile_options(lab3 PRIVATE /W4)
+    target_compile_options(lab3 PRIVATE /W4 /WX)
 else ()
-    target_compile_options(lab3 PRIVATE -Wextra -pedantic -Werror)
+    target_compile_options(lab3 PRIVATE -Wextra -pedantic -Werror -Wall)
 endif()
+
+# Указываем директории для поиска заголовочных файлов
+target_include_directories(lab3 PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
 install(TARGETS lab3 RUNTIME DESTINATION .)
 
@@ -43,9 +60,11 @@ set(CPACK_PACKAGE_VERSION_PATCH "${PROJECT_VERSION_PATCH}")
 
 if(WIN32)
     set(CPACK_GENERATOR ZIP)
+    set(CPACK_PACKAGE_NAME "lab3")
 else()
     set(CPACK_GENERATOR DEB)
     set(CPACK_DEBIAN_PACKAGE_MAINTAINER "lab3")
+    set(CPACK_DEBIAN_PACKAGE_NAME "lab3")
 endif()
 
 include(CPack)
