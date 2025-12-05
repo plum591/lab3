@@ -22,7 +22,6 @@ if(WIN32)
     endif()
 endif()
 
-# Добавляем все исходные файлы
 set(SOURCES
     main.cpp
     DLLContainer.cpp
