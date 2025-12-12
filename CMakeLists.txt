@@ -24,9 +24,6 @@ endif()
 
 set(SOURCES
     main.cpp
-    DLLContainer.cpp
-    SeqContainer.cpp
-    SLLContainer.cpp
 )
 
 set(HEADERS
