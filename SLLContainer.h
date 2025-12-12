@@ -44,8 +44,6 @@ public:
     iterator end();
 };
 
-// --- Реализация шаблона (перенесена из SLLContainer.cpp) ---
-
 template <typename T>
 SLLContainer<T>::Node::Node(const T &val) : data(val), next(nullptr) {}
 
@@ -133,8 +131,6 @@ size_t SLLContainer<T>::size() const { return m_size; }
 template <typename T>
 T &SLLContainer<T>::operator[](size_t index)
 {
-    if (index >= m_size)
-        throw std::out_of_range("Index out of range");
     Node *current = m_head;
     for (size_t i = 0; i < index; ++i)
     {
@@ -146,8 +142,6 @@ T &SLLContainer<T>::operator[](size_t index)
 template <typename T>
 void SLLContainer<T>::insert(size_t index, const T &value)
 {
-    if (index > m_size)
-        throw std::out_of_range("Index out of range");
     if (index == m_size)
     {
         push_back(value);
@@ -175,9 +169,6 @@ void SLLContainer<T>::insert(size_t index, const T &value)
 template <typename T>
 void SLLContainer<T>::erase(size_t index)
 {
-    if (index >= m_size)
-        throw std::out_of_range("Index out of range");
-
     if (index == 0)
     {
         Node *toDelete = m_head;

@@ -7,24 +7,24 @@ private:
     struct Node
     {
         T data;
-        Node *next;
-        Node *prev;
-        Node(const T &val);
+        Node *next;         // указатель на след узел
+        Node *prev;         // указатель на пред узел
+        Node(const T &val); // конструктор узла
     };
 
-    Node *m_head;
-    Node *m_tail;
+    Node *m_head; // указатель на первый узел
+    Node *m_tail; // указатель на последний узел
     size_t m_size;
 
 public:
     class iterator
     {
     private:
-        Node *ptr;
+        Node *ptr; // указатель на текущий узел
 
     public:
-        iterator(Node *p);
-        T &operator*();
+        iterator(Node *p); // конструктор итератора
+        T &operator*();    // перегруженный оператор разыменования
         iterator &operator++();
         bool operator!=(const iterator &other) const;
         T get() const;
@@ -38,30 +38,25 @@ public:
     void push_back(const T &value);
     void insert(size_t index, const T &value);
     void erase(size_t index);
-
     size_t size() const;
     T &operator[](size_t index);
-
     iterator begin();
     iterator end();
 };
 
-// --- Реализация шаблона (перенесена из DLLContainer.cpp) ---
-
 template <typename T>
-DLLContainer<T>::Node::Node(const T &val) : data(val), next(nullptr), prev(nullptr) {}
-
+DLLContainer<T>::Node::Node(const T &val) : data(val), next(nullptr), prev(nullptr) {} // конструктор узла
 template <typename T>
 DLLContainer<T>::iterator::iterator(Node *p) : ptr(p) {}
 
 template <typename T>
-T &DLLContainer<T>::iterator::operator*() { return ptr->data; }
+T &DLLContainer<T>::iterator::operator*() { return ptr->data; } // возвращает ссылку(можно менять само значение)
 
 template <typename T>
 typename DLLContainer<T>::iterator &DLLContainer<T>::iterator::operator++()
 {
     if (ptr)
-        ptr = ptr->next;
+        ptr = ptr->next; // переход к следующему элементу
     return *this;
 }
 
@@ -72,13 +67,13 @@ bool DLLContainer<T>::iterator::operator!=(const iterator &other) const
 }
 
 template <typename T>
-T DLLContainer<T>::iterator::get() const { return ptr->data; }
+T DLLContainer<T>::iterator::get() const { return ptr->data; } // возвращает значение (меняет копию значения)
 
 template <typename T>
-DLLContainer<T>::DLLContainer() : m_head(nullptr), m_tail(nullptr), m_size(0) {}
+DLLContainer<T>::DLLContainer() : m_head(nullptr), m_tail(nullptr), m_size(0) {} // пустой список
 
 template <typename T>
-DLLContainer<T>::~DLLContainer()
+DLLContainer<T>::~DLLContainer() // деструктор. Поочерёдно удаляет узлы
 {
     Node *current = m_head;
     while (current)
@@ -120,13 +115,13 @@ void DLLContainer<T>::push_back(const T &value)
     Node *newNode = new Node(value);
     if (!m_tail)
     {
-        m_head = m_tail = newNode;
+        m_head = m_tail = newNode; // пустой список + новый узел
     }
     else
     {
-        m_tail->next = newNode;
+        m_tail->next = newNode; // новый узел = след после последнего
         newNode->prev = m_tail;
-        m_tail = newNode;
+        m_tail = newNode; // новый узел становится последним
     }
     m_size++;
 }
@@ -137,8 +132,6 @@ size_t DLLContainer<T>::size() const { return m_size; }
 template <typename T>
 T &DLLContainer<T>::operator[](size_t index)
 {
-    if (index >= m_size)
-        throw std::out_of_range("Index out of range");
     Node *current = m_head;
     for (size_t i = 0; i < index; ++i)
     {
@@ -150,8 +143,6 @@ T &DLLContainer<T>::operator[](size_t index)
 template <typename T>
 void DLLContainer<T>::insert(size_t index, const T &value)
 {
-    if (index > m_size)
-        throw std::out_of_range("Index out of range");
     if (index == m_size)
     {
         push_back(value);
@@ -159,7 +150,7 @@ void DLLContainer<T>::insert(size_t index, const T &value)
     }
 
     Node *newNode = new Node(value);
-    if (index == 0)
+    if (index == 0) // вставка в начало
     {
         newNode->next = m_head;
         if (m_head)
@@ -168,7 +159,7 @@ void DLLContainer<T>::insert(size_t index, const T &value)
     }
     else
     {
-        Node *current = m_head;
+        Node *current = m_head; // начинаем с 0 элемента
         for (size_t i = 0; i < index; ++i)
             current = current->next;
 
@@ -184,12 +175,9 @@ void DLLContainer<T>::insert(size_t index, const T &value)
 template <typename T>
 void DLLContainer<T>::erase(size_t index)
 {
-    if (index >= m_size)
-        throw std::out_of_range("Index out of range");
-
     Node *toDelete = m_head;
     for (size_t i = 0; i < index; ++i)
-        toDelete = toDelete->next;
+        toDelete = toDelete->next; // находим узел для удаления
 
     if (toDelete->prev)
         toDelete->prev->next = toDelete->next;
